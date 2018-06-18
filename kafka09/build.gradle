@@ -1,0 +1,14 @@
+apply plugin: 'java'
+
+jar {
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    compile group: 'org.apache.kafka', name: 'kafka-clients', version: '0.9.0.1'
+    compile project(':common')
+
+}
