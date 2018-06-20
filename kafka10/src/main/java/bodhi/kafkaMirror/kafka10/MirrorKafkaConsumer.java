@@ -1,4 +1,4 @@
-package bodhi.kafkaMirror.kafka09;
+package bodhi.kafkaMirror.kafka10;
 
 import bodhi.kafkaMirror.common.ConsumerEventHandler;
 import bodhi.kafkaMirror.common.KafkaConsumerInterface;
@@ -40,7 +40,8 @@ public class MirrorKafkaConsumer implements KafkaConsumerInterface {
     }
 
     @Override
-    public void start()  {
+    public void start()   {
+
 
         while (true) {
             final ConsumerRecords<Long, String> consumerRecords =
@@ -58,5 +59,4 @@ public class MirrorKafkaConsumer implements KafkaConsumerInterface {
             consumer.commitAsync();
         }
     }
-
 }

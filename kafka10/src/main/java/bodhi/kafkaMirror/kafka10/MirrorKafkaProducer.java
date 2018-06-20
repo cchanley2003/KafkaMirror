@@ -1,8 +1,10 @@
-package bodhi.kafkaMirror.kafka09;
-
-import org.apache.kafka.clients.producer.*;
+package bodhi.kafkaMirror.kafka10;
 
 import bodhi.kafkaMirror.common.KafkaProducerInterface;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
@@ -11,9 +13,10 @@ import java.util.concurrent.ExecutionException;
 
 public class MirrorKafkaProducer implements KafkaProducerInterface {
 
-    private org.apache.kafka.clients.producer.KafkaProducer<Long, String> producer;
+    private KafkaProducer<Long, String> producer;
 
 
+    @Override
     public void initConnection(String bootstrapServer) {
 
         Properties props = new Properties();
@@ -27,20 +30,21 @@ public class MirrorKafkaProducer implements KafkaProducerInterface {
         producer =  new org.apache.kafka.clients.producer.KafkaProducer<>(props);
     }
 
+    @Override
     public void sendData(Long key, String data, String topic) {
         long time = System.currentTimeMillis();
 
         try {
-                final ProducerRecord<Long, String> record =
-                        new ProducerRecord<>(topic, key, data);
+            final ProducerRecord<Long, String> record =
+                    new ProducerRecord<>(topic, key, data);
 
-                RecordMetadata metadata = producer.send(record).get();
+            RecordMetadata metadata = producer.send(record).get();
 
-                long elapsedTime = System.currentTimeMillis() - time;
-                System.out.printf("sent record(key=%s value=%s) " +
-                                "meta(partition=%d, offset=%d) time=%d\n",
-                        record.key(), record.value(), metadata.partition(),
-                        metadata.offset(), elapsedTime);
+            long elapsedTime = System.currentTimeMillis() - time;
+            System.out.printf("sent record(key=%s value=%s) " +
+                            "meta(partition=%d, offset=%d) time=%d\n",
+                    record.key(), record.value(), metadata.partition(),
+                    metadata.offset(), elapsedTime);
 
         } catch (InterruptedException e) {
             e.printStackTrace();

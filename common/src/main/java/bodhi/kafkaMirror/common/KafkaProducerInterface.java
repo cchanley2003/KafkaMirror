@@ -4,6 +4,6 @@ public interface KafkaProducerInterface {
 
     void initConnection(String bootstrapServer);
 
-    void sendData(String data, String topic);
+    void sendData(Long key, String data, String topic);
 
 }
